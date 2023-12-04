@@ -1,30 +1,20 @@
-# React + TypeScript + Vite
+# IKBO-Front
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Proyecto creado con React con Vite + TypeScript
 
-Currently, two official plugins are available:
+## Pre-requisitos
+Instalar Node v+18 y NPM v+9 https://nodejs.org/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+También puede instalar Yarn v+1.22 o PNPM v+8.
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Clone este proyecto o descárguelo en un zip y descomprímalo. Una vez hecho esto, abra una terminal en la carpeta donde descargó el proyecto y ejecute los siguientes comandos:
 
-- Configure the top-level `parserOptions` property like this:
+## Instalación
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+- **pnpm install** o **npm install** o **yarn install**
+- Luego ejecute **pnpm run dev** o **npm run dev** o **yarn run dev**
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Abrir el proyecto
+
+Al realizar la instalación abra el navegador y diríjase a http://localhost:2525
