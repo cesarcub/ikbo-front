@@ -6,5 +6,6 @@ export interface Report {
     variety?: string,
     color?: string,
     country?: string,
-    stems: number
+    stems?: number,
+    price?: number
 }

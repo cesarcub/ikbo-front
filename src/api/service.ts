@@ -1,13 +1,17 @@
 import { API_ENDPOINT } from '../utils/constants'
-import { ListColumns, ParamsReport } from '../models/ParamsReport'
+import { ParamsReport } from '../models/ParamsReport'
 import { Report } from '../models/Report';
 
-export const getReport = (params: ParamsReport) => {
+export const getReport = async (params: ParamsReport) => {
     const queryParams = mapParams(params)
     const url = `${API_ENDPOINT}?${queryParams}`
-    fetch(url)
-    .then(res => res.json())
-    .then(console.log)
+    try {
+        const request = await fetch(url)
+        const jsonData = await request.json()
+        return jsonData as Report[]
+    } catch {
+        return []
+    }
 }
 
 const mapParams = (params: ParamsReport): string => {

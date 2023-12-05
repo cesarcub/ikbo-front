@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { ListColumns, ParamsReport, ValueType } from '../../models/ParamsReport'
+import { Report } from '../../models/Report';
 import { getReport } from '../../api/service'
 import Loader from '../Loader/Loader'
+import TableReport from '../TableReport/TableReport'
 
 function App() {
 	const [columns, setColumns] = useState(Array<ListColumns>())
@@ -9,6 +11,7 @@ function App() {
 	const [dateEnd, setDateEnd] = useState('2023-10-01')
 	const [valueType, setValueType] = useState('stems')
 	const [isLoading, setIsLoading] = useState(true)
+	const [tableReport, setTableReport] = useState(Array<Report>())
 
 	const listColumns: Array<ListColumns> = ['category', 'color', 'country', 'customer', 'provider', 'variety']
 
@@ -20,8 +23,24 @@ function App() {
 			datefin: dateEnd,
 			value: valueType as ValueType
 		}
+
 		getReport(paramsReport)
-		setIsLoading(false)
+			.then(data => {
+				const dates = [...new Set(data.map( item => item.date ))]
+				const dataGroupByDates = dates. map(date => {
+					const dataGroup = data.map(itemData => {
+						if(date === itemData.date){
+							return itemData
+						}
+					}).filter(miData => miData !== undefined)
+					return dataGroup
+				})
+				console.table(dataGroupByDates)
+				setTableReport(dataGroupByDates)
+
+			})
+			.finally(() => setIsLoading(false))
+
 	}, [columns, dateInit, dateEnd, valueType])
 
 	const handleChangeColumns = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +83,7 @@ function App() {
 
 	return (
 		<>
-			{isLoading && <Loader></Loader>}
+			{isLoading && <Loader />}
 			<main className="container mx-auto">
 				<header className="bg-sky-200">
 					<div className="mb-4 p-4 border-b border-b-sky-300">
@@ -72,35 +91,39 @@ function App() {
 					</div>
 					<div className="flex flex-wrap p-4 border-b border-b-sky-300">
 						<div>
-							<label htmlFor="dateInit">From*:</label>
-							<input type="date" value="2023-10-01" className="ml-2 rounded-md px-3" name="Fecha de inicio" id="dateInit" onChange={e =>setDateInit(e.target.value)} />
+							<label htmlFor="dateInit" className="font-bold">From<span className="text-xs font-red">*</span>:</label>
+							<input type="date" value="2023-10-01" className="ml-2 rounded-md px-3" name="Fecha de inicio" id="dateInit" onChange={e => setDateInit(e.target.value)} />
 						</div>
 						<div className="ml-8">
-							<label htmlFor="dateInit">To (optional):</label>
-							<input type="date" className="ml-2 rounded-md px-3" name="Fecha de inicio" id="dateInit" onChange={e =>setDateEnd(e.target.value)}/>
+							<label htmlFor="dateInit"><span className="font-bold">To</span> (optional):</label>
+							<input type="date" className="ml-2 rounded-md px-3" name="Fecha de inicio" id="dateInit" onChange={e => setDateEnd(e.target.value)} />
 						</div>
 					</div>
-					<div className="flex flex-wrap justify-between p-4 border-b border-b-sky-300">
-						{listColumns.map(column =>
-							<div key={column}>
-								<input type="checkbox" id={column} onChange={e => handleChangeColumns(e)} />
-								<label htmlFor={column} className="capitalize ml-1">{column}</label>
-							</div>
-						)
-						}
+					<div className="p-4 border-b border-b-sky-300">
+						<p className="text-xs mb-2 font-bold">Columns:</p>
+						<div className="flex flex-wrap justify-between">
+							{listColumns.map(column =>
+								<div key={column}>
+									<input type="checkbox" id={column} onChange={e => handleChangeColumns(e)} />
+									<label htmlFor={column} className="capitalize ml-1">{column}</label>
+								</div>
+							)
+							}
+						</div>
 					</div>
 					<div className="flex flex-wrap p-4 border-b border-b-sky-300">
 						<div>
-							<input type="radio" id="stems" name="valueType" checked onChange={() => setValueType('stems')}/>
-							<label htmlFor="stems" className="ml-1">Stems</label>
+							<input type="radio" id="stems" name="valueType" defaultChecked={valueType === 'stems'} onClick={() => setValueType('stems')} />
+							<label htmlFor="stems" className="ml-1">By stems</label>
 						</div>
 						<div className='ml-2'>
-							<input type="radio" id="price" name="valueType" />
-							<label htmlFor="price" className="ml-1" onChange={() => setValueType('price')}>Price</label>
+							<input type="radio" id="price" name="valueType" defaultChecked={valueType === 'price'}  onClick={() => setValueType('price')}/>
+							<label htmlFor="price" className="ml-1">By price</label>
 						</div>
 					</div>
 				</header>
 				<section>
+					<TableReport data={tableReport} />
 				</section>
 			</main>
 		</>
