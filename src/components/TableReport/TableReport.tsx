@@ -4,17 +4,6 @@ import { Report } from '../../models/Report';
 function TableReport({ data }: { data: Report[] }) {
     const [report, setReport] = useState(Array<any>())
     const [columnsTable, setColumnsTable] = useState(Array<string>())
-    /*
-    const dataGroupByDates = dates.map(date => {
-                    const dataGroup = data.map(itemData => {
-                        if(date === itemData.date){
-                            return itemData
-                        }
-                    }).filter(miData => miData !== undefined)
-                    return dataGroup
-                })
-                setTableReport(dataGroupByDates)
-     */
 
     useEffect(() => {
         handleChangeData(data)
