@@ -25,19 +25,8 @@ function App() {
 		}
 
 		getReport(paramsReport)
-			.then(data => {
-				const dates = [...new Set(data.map( item => item.date ))]
-				const dataGroupByDates = dates. map(date => {
-					const dataGroup = data.map(itemData => {
-						if(date === itemData.date){
-							return itemData
-						}
-					}).filter(miData => miData !== undefined)
-					return dataGroup
-				})
-				console.table(dataGroupByDates)
-				setTableReport(dataGroupByDates)
-
+			.then(data => {		
+				setTableReport(data)
 			})
 			.finally(() => setIsLoading(false))
 
@@ -123,7 +112,7 @@ function App() {
 					</div>
 				</header>
 				<section>
-					<TableReport data={tableReport} />
+					<TableReport data={tableReport}/>
 				</section>
 			</main>
 		</>
