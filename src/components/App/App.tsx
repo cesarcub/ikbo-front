@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react'
 import { ListColumns, ParamsReport, ValueType } from '../../models/ParamsReport'
 import { getReport } from '../../api/service'
+import Loader from '../Loader/Loader'
 
 function App() {
 	const [columns, setColumns] = useState(Array<ListColumns>())
 	const [dateInit, setDateInit] = useState('2023-10-01')
 	const [dateEnd, setDateEnd] = useState('2023-10-01')
 	const [valueType, setValueType] = useState('stems')
+	const [isLoading, setIsLoading] = useState(true)
 
 	const listColumns: Array<ListColumns> = ['category', 'color', 'country', 'customer', 'provider', 'variety']
 
 	useEffect(() => {
+		setIsLoading(true)
 		const paramsReport: ParamsReport = {
 			columns: columns,
 			dateini: dateInit,
@@ -18,6 +21,7 @@ function App() {
 			value: valueType as ValueType
 		}
 		getReport(paramsReport)
+		setIsLoading(false)
 	}, [columns, dateInit, dateEnd, valueType])
 
 	const handleChangeColumns = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +64,7 @@ function App() {
 
 	return (
 		<>
+			{isLoading && <Loader></Loader>}
 			<main className="container mx-auto">
 				<header className="bg-sky-200">
 					<div className="mb-4 p-4 border-b border-b-sky-300">
@@ -96,7 +101,6 @@ function App() {
 					</div>
 				</header>
 				<section>
-
 				</section>
 			</main>
 		</>
