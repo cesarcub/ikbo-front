@@ -33,11 +33,12 @@ function TableReport({ data }: { data: Report[] }) {
     }
 
     const tableBodyConstructor = (columns: string[], dataGroupByDates: object) => {
+        console.log(dataGroupByDates)
+
         const cosito = Object.keys(dataGroupByDates).map( index => {
             const fill = dataGroupByDates[index].map( objeto => {
                 const fillCosito = columns.map(col => {
                     if(col === index) {
-                        console.log(objeto)
                     }
                 })
             })
