@@ -3,6 +3,7 @@ import { Report } from '../../models/Report'
 
 function TableReport({ data }: { data: Report[] }) {
     const [columnsTable, setColumnsTable] = useState(Array<string>())
+    const [rowsTable, setRowsTable] = useState('')
 
     useEffect(() => {
         handleChangeData(data)
@@ -13,18 +14,17 @@ function TableReport({ data }: { data: Report[] }) {
         const dates = [...new Set(dataReport.map(item => item.date))]
         let dataGroupByDates = []
         dates.forEach(date => {
-            dataGroupByDates[date] = dataReport.filter(itemData => itemData.date === date)
+            dataGroupByDates.push(dataReport.filter(itemData => itemData.date === date))
         })
-        const columnsData = buildColumns(dataReport, dataGroupByDates)
+        const columnsData = buildColumns(dataReport, dataGroupByDates, dates)
+        setRowsTable(tableDataConstructor(columnsData, dataGroupByDates, dates))
         setColumnsTable(columnsData)
-        tableDataConstructor(columnsData, dataGroupByDates)
-
     }
 
-    const buildColumns = (dataReport: Report[], dataGroupByDates = []) => {
+    const buildColumns = (dataReport: Report[], dataGroupByDates = [], dates: string[]) => {
         return Object.keys(dataReport[0])
             .filter(column => !['stems', 'date', 'price'].includes(column))
-            .concat(Object.keys(dataGroupByDates))
+            .concat(dates)
             .concat('Total')
     }
 
@@ -32,10 +32,29 @@ function TableReport({ data }: { data: Report[] }) {
         return columns.map(column => (<th key={column} className="capitalize border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">{column}</th>))
     }
 
-    const tableDataConstructor = (columns: string[], dataGroupByDates: []) => {
+    const tableDataConstructor = (columns: string[], dataGroupByDates: [], dates: string[]) => {
         console.log(dataGroupByDates)
-        console.log(dataGroupByDates.length)
+        if(dates.length === 1) {
+            const [dataOfDate] = dataGroupByDates;
+            let total = 0
+            return dataOfDate.map(item => {
+                total += item.stems ?? item.price
+                const valueType = item.stems ? item.stems.toLocaleString() : `$${item.price.toLocaleString()}`
+                return (<tr>
+                    {Object.keys(item)
+                    .filter(item => item !== 'date' && item !== 'price' && item !== 'stems')
+                    .map( field => <td className="border p-2 text-sm text-left">{item[field]}</td>)}
+                    <td className="border p-2 text-sm text-right">{valueType}</td>
+                    <td className="border p-2 text-sm text-right">{valueType}</td>
+                </tr>)
+            })
+            
+        }
         
+    }
+
+    const tableViewConstructor = () => {
+
     }
 
     return (
@@ -49,7 +68,7 @@ function TableReport({ data }: { data: Report[] }) {
                         </tr>
                     </thead>
                     <tbody>
-
+                        {rowsTable}
                     </tbody>
                 </table>
             }
