@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react'
-import { ListColumns, ParamsReport, ValueType } from '../../models/ParamsReport'
-import { Report } from '../../models/Report';
+
+import { ListColumns, ParamsReport, ValueType, LIST_COLUMNS } from '../../models/ParamsReport'
+import { Report } from '../../models/Report'
 import { getReport } from '../../api/service'
+import { INITIAL_DATA } from '../../utils/constants'
+
+
 import Loader from '../Loader/Loader'
 import TableReport from '../TableReport/TableReport'
 
 function App() {
 	const [columns, setColumns] = useState(Array<ListColumns>())
-	const [dateInit, setDateInit] = useState('2023-10-01')
-	const [dateEnd, setDateEnd] = useState('2023-10-01')
-	const [valueType, setValueType] = useState('stems')
+	const [dateInit, setDateInit] = useState(INITIAL_DATA.dateInit)
+	const [dateEnd, setDateEnd] = useState(INITIAL_DATA.dateInit)
+	const [valueType, setValueType] = useState(INITIAL_DATA.valueType)
 	const [isLoading, setIsLoading] = useState(true)
 	const [tableReport, setTableReport] = useState(Array<Report>())
-
-	const listColumns: Array<ListColumns> = ['category', 'color', 'country', 'customer', 'provider', 'variety']
 
 	useEffect(() => {
 		setIsLoading(true)
@@ -91,7 +93,7 @@ function App() {
 					<div className="p-4 border-b border-b-sky-300">
 						<p className="text-xs mb-2 font-bold">Columns:</p>
 						<div className="flex flex-wrap justify-between">
-							{listColumns.map(column =>
+							{LIST_COLUMNS.map(column =>
 								<div key={column}>
 									<input type="checkbox" id={column} onChange={e => handleChangeColumns(e)} />
 									<label htmlFor={column} className="capitalize ml-1">{column}</label>

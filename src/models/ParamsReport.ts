@@ -5,11 +5,8 @@ export interface ParamsReport {
     value: ValueType
 }
 
-export type ListColumns = 'category' |
-    'color' |
-    'country' |
-    'customer' |
-    'provider' |
-    'variety'
+export const LIST_COLUMNS = ['category', 'color', 'country', 'customer', 'provider', 'variety']
+
+export type ListColumns = typeof LIST_COLUMNS[number]
 
 export type ValueType = 'stems' | 'price'

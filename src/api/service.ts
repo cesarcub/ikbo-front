@@ -1,6 +1,6 @@
 import { API_ENDPOINT } from '../utils/constants'
 import { ParamsReport } from '../models/ParamsReport'
-import { Report } from '../models/Report';
+import { Report } from '../models/Report'
 
 export const getReport = async (params: ParamsReport) => {
     const queryParams = mapParams(params)

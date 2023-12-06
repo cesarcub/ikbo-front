@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Report } from '../../models/Report';
+import { useState, useEffect } from 'react'
+import { Report } from '../../models/Report'
 
 function TableReport({ data }: { data: Report[] }) {
     const [columnsTable, setColumnsTable] = useState(Array<string>())
@@ -11,13 +11,13 @@ function TableReport({ data }: { data: Report[] }) {
     const handleChangeData = (dataReport: Report[]) => {
         if (dataReport.length === 0) return
         const dates = [...new Set(dataReport.map(item => item.date))]
-        let dataGroupByDates = {};
+        let dataGroupByDates = []
         dates.forEach(date => {
             dataGroupByDates[date] = dataReport.filter(itemData => itemData.date === date)
         })
         const columnsData = buildColumns(dataReport, dataGroupByDates)
         setColumnsTable(columnsData)
-        tableBodyConstructor(columnsData, dataGroupByDates)
+        tableDataConstructor(columnsData, dataGroupByDates)
 
     }
 
@@ -32,18 +32,9 @@ function TableReport({ data }: { data: Report[] }) {
         return columns.map(column => (<th key={column} className="capitalize border border-slate-300 dark:border-slate-600 font-semibold p-4 text-slate-900 dark:text-slate-200 text-left">{column}</th>))
     }
 
-    const tableBodyConstructor = (columns: string[], dataGroupByDates: object) => {
+    const tableDataConstructor = (columns: string[], dataGroupByDates: []) => {
         console.log(dataGroupByDates)
-
-        const cosito = Object.keys(dataGroupByDates).map( index => {
-            const fill = dataGroupByDates[index].map( objeto => {
-                const fillCosito = columns.map(col => {
-                    if(col === index) {
-                    }
-                })
-            })
-
-        })
+        console.log(dataGroupByDates.length)
         
     }
 
