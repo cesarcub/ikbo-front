@@ -33,13 +33,16 @@ function TableReport({ data }: { data: Report[] }) {
     }
 
     const tableDataConstructor = (columns: string[], dataGroupByDates: [], dates: string[]) => {
-        console.log(dataGroupByDates)
         if(dates.length === 1) {
             const [dataOfDate] = dataGroupByDates;
             let total = 0
-            return dataOfDate.map(item => {
+            let colspan = 0
+            let typeValue = 'stems'
+            const rows = dataOfDate.map(item => {
                 total += item.stems ?? item.price
-                const valueType = item.stems ? item.stems.toLocaleString() : `$${item.price.toLocaleString()}`
+                colspan = Object.keys(item).length - 2
+                typeValue = item.stems ? 'stems' : 'price'
+                const valueType = item.stems ? item.stems.toLocaleString() : `$ ${item.price.toLocaleString()}`
                 return (<tr>
                     {Object.keys(item)
                     .filter(item => item !== 'date' && item !== 'price' && item !== 'stems')
@@ -48,20 +51,20 @@ function TableReport({ data }: { data: Report[] }) {
                     <td className="border p-2 text-sm text-right">{valueType}</td>
                 </tr>)
             })
-            
+            const totalRows = <tr>
+                <th className='border p-2 text-sm text-center'colSpan={colspan}>Total:</th>
+                <th className='border p-2 text-sm text-right'>{typeValue === 'stems' ? total.toLocaleString() : `$ ${total.toLocaleString()}`}</th>
+                <th className='border p-2 text-sm text-right'>{typeValue === 'stems' ? total.toLocaleString() : `$ ${total.toLocaleString()}`}</th>
+            </tr>
+            return [rows, totalRows]
         }
-        
-    }
-
-    const tableViewConstructor = () => {
-
     }
 
     return (
         <>
             {data.length === 0 && <div className="text-center p-4">👀 Report not found, please select at least a column</div>}
             {data.length !== 0 &&
-                <table className="w-full border-collapse border border-slate-400">
+                <table className="w-full border-collapse border border-slate-400 mb-10">
                     <thead className="bg-slate-50 dark:bg-slate-700">
                         <tr>
                             {columnsConstructor(columnsTable)}
